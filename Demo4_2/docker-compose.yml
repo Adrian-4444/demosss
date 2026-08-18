@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8000"
+    volumes:
+      - backend_data:/app
+    environment:
+      - DATABASE_URL=sqlite:///./keystroke_auth.db
+      - SECRET_KEY=7d4bfa846cde6e24db498fe717c385a86d2678bb09827c191a27e7f9a7d3c8c1
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:8080
+    depends_on:
+      - backend
+
+volumes:
+  backend_data:
