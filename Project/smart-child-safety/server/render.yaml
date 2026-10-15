@@ -1,0 +1,37 @@
+services:
+  - type: web
+    name: smart-child-safety-backend
+    runtime: python
+    region: oregon
+    plan: free
+    branch: main
+    rootDir: smart-child-safety/server
+    buildCommand: pip install -r requirements.txt && alembic upgrade head
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+
+    healthCheckPath: /health
+    autoDeploy: false
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: API_V1_PREFIX
+        value: /api/v1
+      - key: DATABASE_URL
+        fromDatabase:
+          name: smart-child-safety-db
+          property: connectionString
+      - key: CORS_ORIGINS
+        value: '["https://smart-child-safety-parent.web.app","https://smart-child-safety-dashboard.web.app"]'
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CREDENTIALS_JSON
+        sync: false
+
+databases:
+  - name: smart-child-safety-db
+    region: oregon
+    plan: free
+    databaseName: smart_child_safety
+    user: postgres

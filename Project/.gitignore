@@ -1,0 +1,12 @@
+.DS_Store
+.venv/
+.env
+*.pyc
+__pycache__/
+.pytest_cache/
+*.db
+*.sqlite
+*.sqlite3
+firebase-service-account*.json
+*firebase*.json
+*.json.key
